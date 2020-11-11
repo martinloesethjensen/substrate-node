@@ -316,6 +316,22 @@ impl pallet_scheduler::Trait for Runtime {
     type WeightInfo = ();
 }
 
+parameter_types! {
+	pub const MultiDepositBase: Balance = 100000;
+	pub const MultiDepositFactor: Balance = 1000;
+	pub const MaxSignatories: u16 = 4;
+}
+
+impl pallet_multisig::Trait for Runtime {
+	type Event = Event;
+	type Call = Call;
+	type Currency = Balances;
+	type DepositBase = MultiDepositBase;
+	type DepositFactor = MultiDepositFactor;
+	type MaxSignatories = MaxSignatories;
+	type WeightInfo = ();
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -335,6 +351,7 @@ construct_runtime!(
 		TemplateModule: pallet_template::{Module, Call, Storage, Event<T>},
 		Contracts: pallet_contracts::{Module, Call, Config, Storage, Event<T>},
 		Scheduler: pallet_scheduler::{Module, Call, Storage, Event<T>},
+		Multisig: pallet_multisig::{Module, Call, Storage, Event<T>},
 	}
 );
 
